@@ -10,3 +10,5 @@ ExpressionTransformationTest/obj/
 ExpressionTransformationTest/bin/
 ClassMapperTests/bin/Debug/Microsoft.VisualStudio.TestPlatform.TestFramework.xml
 ClassMapperTests/bin/Debug/Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+ConsoleApp/bin/
+ConsoleApp/obj/
