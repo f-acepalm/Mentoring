@@ -1,0 +1,12 @@
+packages/
+Mentoring/bin/
+Mentoring/obj/
+ExtendedE3S/obj/
+ExtendedE3S/bin/
+ExpressionTransformation/obj/
+ClassMapper/obj/
+ClassMapperTests/obj/
+ExpressionTransformationTest/obj/
+ExpressionTransformationTest/bin/
+ClassMapperTests/bin/Debug/Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+ClassMapperTests/bin/Debug/Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
