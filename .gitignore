@@ -12,3 +12,5 @@ ClassMapperTests/bin/Debug/Microsoft.VisualStudio.TestPlatform.TestFramework.xml
 ClassMapperTests/bin/Debug/Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
 ConsoleApp/bin/
 ConsoleApp/obj/
+E3S/obj/
+E3S/bin/
