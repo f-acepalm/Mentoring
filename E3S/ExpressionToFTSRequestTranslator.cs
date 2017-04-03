@@ -29,7 +29,32 @@ namespace Sample03
 
 				return node;
 			}
-			return base.VisitMethodCall(node);
+
+            if (node.Method.DeclaringType == typeof(string))
+            {
+                var memberExpression = node.Object as MemberExpression;
+                if (memberExpression == null)
+                {
+                    return base.VisitMethodCall(node);
+                }
+
+                var isContainsMethod = node.Method.Name == "Contains";
+                var matchBefore = node.Method.Name == "EndsWith" || isContainsMethod;
+                var matchAfter = node.Method.Name == "StartsWith" || isContainsMethod;
+                if (matchBefore || matchAfter)
+                {
+                    Visit(memberExpression);
+                    resultString.Append("(");
+                    if (matchBefore) resultString.Append("*");
+                    Visit(node.Arguments[0]);
+                    if (matchAfter) resultString.Append("*");
+                    resultString.Append(")");
+
+                    return node;
+                }
+            }
+
+            return base.VisitMethodCall(node);
 		}
 
 		protected override Expression VisitBinary(BinaryExpression node)
@@ -37,21 +62,41 @@ namespace Sample03
 			switch (node.NodeType)
 			{
 				case ExpressionType.Equal:
-					if (!(node.Left.NodeType == ExpressionType.MemberAccess))
-						throw new NotSupportedException(string.Format("Left operand should be property or field", node.NodeType));
+                    Expression memberAccess = null;
+                    Expression constantExpression = null;
 
-					if (!(node.Right.NodeType == ExpressionType.Constant))
-						throw new NotSupportedException(string.Format("Right operand should be constant", node.NodeType));
+                    if (node.Left.NodeType == ExpressionType.MemberAccess)
+                    {
+                        memberAccess = node.Left;
+                        constantExpression = node.Right.NodeType == ExpressionType.Constant ? node.Right : null;
+                    }
+                    else if (node.Right.NodeType == ExpressionType.MemberAccess)
+                    {
+                        memberAccess = node.Right;
+                        constantExpression = node.Left.NodeType == ExpressionType.Constant ? node.Left : null;
+                    }
 
-					Visit(node.Left);
+                    if (memberAccess == null)
+                        throw new NotSupportedException(string.Format("Property operand was not provided.", node.NodeType));
+
+                    if (constantExpression == null)
+                        throw new NotSupportedException(string.Format("Constant operand was not provided.", node.NodeType));
+
+                    Visit(memberAccess);
 					resultString.Append("(");
-					Visit(node.Right);
+					Visit(constantExpression);
 					resultString.Append(")");
 					break;
 
-				default:
-					throw new NotSupportedException(string.Format("Operation {0} is not supported", node.NodeType));
-			};
+                case ExpressionType.And:
+                case ExpressionType.AndAlso:
+                    Visit(node.Left);
+                    resultString.Append(" AND ");
+                    Visit(node.Right);
+                    break;
+                default:
+                    throw new NotSupportedException(string.Format("Operation {0} is not supported", node.NodeType));
+            };
 
 			return node;
 		}
