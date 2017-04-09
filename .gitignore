@@ -14,3 +14,6 @@ ConsoleApp/bin/
 ConsoleApp/obj/
 E3S/obj/
 E3S/bin/
+XmlTools/obj/
+XmlToolsTests/obj/
+XmlToolsTests/bin/
