@@ -48,7 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RssGeneratorTest.cs" />
+    <Compile Include="XsltTransformerTest.cs" />
     <Compile Include="ValidatorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -67,6 +67,7 @@
   <ItemGroup>
     <Content Include="books.xml" />
     <Content Include="booksInvalid.xml" />
+    <Content Include="BooksToHtml.xslt" />
     <Content Include="BooksToRSS.xslt" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
