@@ -10,26 +10,6 @@ namespace ConsoleApp // Этот проект создан для быстрой
 {
     class Program
     {
-        const int SystemPowerInformation = 12;
-        const uint STATUS_SUCCESS = 0;
-
-        struct SYSTEM_POWER_INFORMATION
-        {
-            public uint MaxIdlenessAllowed;
-            public uint Idleness;
-            public uint TimeRemaining;
-            public byte CoolingMode;
-        }
-
-        [DllImport("powrprof.dll")]
-        static extern uint CallNtPowerInformation(
-            int informationLevel,
-            IntPtr inputBuffer,
-            int inputBufferSize,
-            out SYSTEM_POWER_INFORMATION spi,
-            int outputBufferSize
-        );
-
         static void Main(string[] args)
         {
             //SYSTEM_POWER_INFORMATION spi;
@@ -44,8 +24,9 @@ namespace ConsoleApp // Этот проект создан для быстрой
             //    Console.WriteLine(spi.TimeRemaining);
             var powerManager = new PowerManager();
 
-            var x = powerManager.GetBatteryState();
-            Console.WriteLine(x);
+            //var x = powerManager.GetBatteryState();
+            powerManager.ReserveHibernationFile();
+            //Console.WriteLine(x);
             Console.ReadLine();
         }
     }
