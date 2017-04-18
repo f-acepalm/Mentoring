@@ -18,3 +18,5 @@ XmlTools/obj/
 XmlToolsTests/obj/
 XmlToolsTests/bin/
 PowerStateManagement/obj/
+PowerStateManagementTests/obj/
+PowerStateManagementTests/bin/

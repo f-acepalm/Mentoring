@@ -24,10 +24,10 @@ namespace ConsoleApp // Этот проект создан для быстрой
             //    Console.WriteLine(spi.TimeRemaining);
             var powerManager = new PowerManager();
 
-            //var x = powerManager.GetBatteryState();
-            powerManager.ReserveHibernationFile();
+            var x = powerManager.GetBatteryState();
+            //powerManager.Suspend();
             //Console.WriteLine(x);
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }

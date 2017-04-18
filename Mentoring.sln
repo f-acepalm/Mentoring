@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_Unmanaged_Code", "3_Unman
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerStateManagement", "PowerStateManagement\PowerStateManagement.csproj", "{41BFC663-34FE-4EC8-8580-57906E4D320C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerStateManagementTests", "PowerStateManagementTests\PowerStateManagementTests.csproj", "{68BEECE4-BD13-469F-AA9F-8D42EFDF40D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{41BFC663-34FE-4EC8-8580-57906E4D320C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41BFC663-34FE-4EC8-8580-57906E4D320C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41BFC663-34FE-4EC8-8580-57906E4D320C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68BEECE4-BD13-469F-AA9F-8D42EFDF40D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68BEECE4-BD13-469F-AA9F-8D42EFDF40D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68BEECE4-BD13-469F-AA9F-8D42EFDF40D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68BEECE4-BD13-469F-AA9F-8D42EFDF40D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,5 +88,6 @@ Global
 		{8CDE8737-D7BE-47CB-BF80-11663044AEDA} = {30A8080F-BD0A-438B-A42A-2B55F1EA924B}
 		{9EB3F788-22FF-4CBB-93D7-8F081812802F} = {30A8080F-BD0A-438B-A42A-2B55F1EA924B}
 		{41BFC663-34FE-4EC8-8580-57906E4D320C} = {683D0A8C-E5FC-43D5-9FE5-917F45835EDF}
+		{68BEECE4-BD13-469F-AA9F-8D42EFDF40D7} = {683D0A8C-E5FC-43D5-9FE5-917F45835EDF}
 	EndGlobalSection
 EndGlobal

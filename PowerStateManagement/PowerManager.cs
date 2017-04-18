@@ -1,17 +1,15 @@
-﻿using PowerStateManagement.Structures;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using PowerStateManagement.Structures;
 
 namespace PowerStateManagement
 {
-    public class PowerManager
+    [ComVisible(true)]
+    [Guid("F1C2EDF1-A592-446C-9E51-6D5E57E57839")]
+    [ClassInterface(ClassInterfaceType.None)]
+    public class PowerManager : IPowerManager
     {
-        
-        
         private const uint SuccessStatus = 0;
 
         public int GetBatteryState()
@@ -21,8 +19,8 @@ namespace PowerStateManagement
             uint resultStatus = CallNtPowerInformation(InformationLevels.SystemBatteryState, IntPtr.Zero, 0, out result, outputBufferSize);
             if (resultStatus != SuccessStatus)
             {
-                throw new ContextMarshalException(); //не знаю точно, какой ексепшен тут должен быть, но очень хочется тут сгенерить ексепшен.
-            }                                        //PS: Слава, эти комменты только для тебя, считай, что на продакшене их нет.
+                throw new Win32Exception((int)resultStatus);
+            }
 
             double remaining = result.RemainingCapacity;
             double max = result.MaxCapacity;
@@ -34,71 +32,38 @@ namespace PowerStateManagement
 
             return (int)percent;
         }
-
-        public SystemPowerInformation GetSystemPowerInformation()
+                
+        public DateTime GetLastSleepTime()
         {
-            SystemPowerInformation result;
-            var outputBufferSize = Marshal.SizeOf(typeof(SystemPowerInformation));
-            uint resultStatus = CallNtPowerInformation(InformationLevels.SystemPowerInformation, IntPtr.Zero, 0, out result, outputBufferSize);
-            if (resultStatus != SuccessStatus)
-            {
-                throw new ContextMarshalException();
-            }
-
-            return result;
+            return GetSleepInformation(InformationLevels.LastSleepTime);
         }
 
-        public UInt64 GetLastSleepTime()
+        public DateTime GetLastWakeTime()
         {
-            UInt64 result;
-            var outputBufferSize = Marshal.SizeOf(typeof(UInt64));
-            uint resultStatus = CallNtPowerInformation(InformationLevels.LastSleepTime, IntPtr.Zero, 0, out result, outputBufferSize);
-            if (resultStatus != SuccessStatus)
-            {
-                throw new ContextMarshalException();
-            }
-
-            return result;
-        }
-
-        public UInt64 GetLastWakeTime()
-        {
-            UInt64 result;
-            var outputBufferSize = Marshal.SizeOf(typeof(UInt64));
-            uint resultStatus = CallNtPowerInformation(InformationLevels.LastWakeTime, IntPtr.Zero, 0, out result, outputBufferSize);
-            if (resultStatus != SuccessStatus)
-            {
-                throw new ContextMarshalException();
-            }
-
-            return result;
+            return GetSleepInformation(InformationLevels.LastWakeTime);
         }
 
         public void ReserveHibernationFile()
         {
-            var inputBuffer = new[] { true };
-
-            var result = CallNtPowerInformation(
-                InformationLevels.SystemReserveHiberFile,
-                inputBuffer,
-                (uint)Marshal.SizeOf<bool>(),
-                IntPtr.Zero,
-                0);
-            if (result != SuccessStatus)
-                throw new ContextMarshalException();
-            ////Int32 input = 1;
-            //var pointer = Marshal.AllocHGlobal(sizeof(int));
-            //Marshal.WriteInt32(pointer, 1);
-            //var inputBufferSize = Marshal.SizeOf(typeof(Int32));
-            //uint resultStatus = CallNtPowerInformation(SystemReserveHiberFileLevel, ref input, inputBufferSize, IntPtr.Zero, 0);
-            ////Marshal.FreeHGlobal(pointer);
-            //if (resultStatus != SuccessStatus)
-            //{
-            //    throw new ContextMarshalException();
-            //}
+            ReserveHibernationFile(true);
         }
-        
-        [DllImport("powrprof.dll")]
+
+        public void DeleteHibernationFile()
+        {
+            ReserveHibernationFile(false);
+        }
+
+        public void Suspend()
+        {
+            SetSuspendState(false, false, false);
+        }
+
+        public uint GetIdleness()
+        {
+            return GetSystemPowerInformation().Idleness;
+        }
+
+        [DllImport("powrprof.dll", SetLastError = true)]
         private static extern uint CallNtPowerInformation
         (
             InformationLevels informationLevel,
@@ -108,7 +73,7 @@ namespace PowerStateManagement
             int outputBufferSize
         );
 
-        [DllImport("powrprof.dll")]
+        [DllImport("powrprof.dll", SetLastError = true)]
         private static extern uint CallNtPowerInformation
         (
             InformationLevels informationLevel,
@@ -118,7 +83,7 @@ namespace PowerStateManagement
             int outputBufferSize
         );
 
-        [DllImport("powrprof.dll")]
+        [DllImport("powrprof.dll", SetLastError = true)]
         private static extern uint CallNtPowerInformation
         (
             InformationLevels informationLevel,
@@ -129,11 +94,60 @@ namespace PowerStateManagement
         );
 
         [DllImport("powrprof.dll", SetLastError = true)]
-        public static extern uint CallNtPowerInformation(
-            InformationLevels InformationLevel, 
-            [In] bool[] lpInputBuffer,
-            uint nInputBufferSize,
-            IntPtr lpOutputBuffer,
-            uint nOutputBufferSize);
+        private static extern uint CallNtPowerInformation
+        (
+            InformationLevels InformationLevel,
+            IntPtr inputBuffer,
+            int inputBufferSize,
+            IntPtr result,
+            int outputBufferSize
+        );
+
+        [DllImport("powrprof.dll", SetLastError = true)]
+        private static extern bool SetSuspendState(bool hibernate, bool forceCritical, bool disableWakeEvent);
+
+        [DllImport("kernel32")]
+        public static extern ulong GetTickCount64();
+
+        private DateTime GetSleepInformation(InformationLevels level)
+        {
+            UInt64 result;
+            var outputBufferSize = Marshal.SizeOf(typeof(UInt64));
+            uint resultStatus = CallNtPowerInformation(level, IntPtr.Zero, 0, out result, outputBufferSize);
+            if (resultStatus != SuccessStatus)
+            {
+                throw new Win32Exception((int)resultStatus);
+            }
+
+            var systemStartupTime = GetTickCount64() * 10000;
+
+            return DateTime.Now - TimeSpan.FromTicks((long)systemStartupTime) + TimeSpan.FromTicks((long)result);
+        }
+
+        private void ReserveHibernationFile(bool shoulReserve)
+        {
+            int inputBufferSize = Marshal.SizeOf(typeof(int));
+            IntPtr input = Marshal.AllocHGlobal(inputBufferSize);
+            Marshal.WriteInt32(input, 0, shoulReserve ? 1 : 0);
+            uint resultStatus = CallNtPowerInformation(InformationLevels.SystemReserveHiberFile, input, inputBufferSize, IntPtr.Zero, 0);
+            Marshal.FreeHGlobal(input);
+            if (resultStatus != SuccessStatus)
+            {
+                throw new Win32Exception((int)resultStatus);
+            }
+        }
+
+        private SystemPowerInformation GetSystemPowerInformation()
+        {
+            SystemPowerInformation result;
+            var outputBufferSize = Marshal.SizeOf(typeof(SystemPowerInformation));
+            uint resultStatus = CallNtPowerInformation(InformationLevels.SystemPowerInformation, IntPtr.Zero, 0, out result, outputBufferSize);
+            if (resultStatus != SuccessStatus)
+            {
+                throw new Win32Exception((int)resultStatus);
+            }
+
+            return result;
+        }
     }
 }
