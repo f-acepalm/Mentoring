@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassMapperTests", "ClassMapperTests\ClassMapperTests.csproj", "{41E346B6-CA26-4AEE-BF99-FF095C4980D6}"
 EndProject
@@ -26,6 +26,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_Unmanaged_Code", "3_Unmanaged_Code", "{683D0A8C-E5FC-43D5-9FE5-917F45835EDF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerStateManagement", "PowerStateManagement\PowerStateManagement.csproj", "{41BFC663-34FE-4EC8-8580-57906E4D320C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_Multi-threading", "4_Multi-threading", "{678124DC-D48F-4C44-9B70-53136DB175E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IanaUtilities", "IanaUtilities\IanaUtilities.csproj", "{17DF8343-A1B1-4C81-AC3C-6474F8CD7F71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IanaUtilitiesTests", "IanaUtilitiesTests\IanaUtilitiesTests.csproj", "{544829B4-9EAC-4175-B5DD-6FBD59B9E8A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +75,14 @@ Global
 		{41BFC663-34FE-4EC8-8580-57906E4D320C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41BFC663-34FE-4EC8-8580-57906E4D320C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41BFC663-34FE-4EC8-8580-57906E4D320C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17DF8343-A1B1-4C81-AC3C-6474F8CD7F71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17DF8343-A1B1-4C81-AC3C-6474F8CD7F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17DF8343-A1B1-4C81-AC3C-6474F8CD7F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17DF8343-A1B1-4C81-AC3C-6474F8CD7F71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{544829B4-9EAC-4175-B5DD-6FBD59B9E8A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{544829B4-9EAC-4175-B5DD-6FBD59B9E8A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{544829B4-9EAC-4175-B5DD-6FBD59B9E8A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{544829B4-9EAC-4175-B5DD-6FBD59B9E8A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,5 +96,7 @@ Global
 		{8CDE8737-D7BE-47CB-BF80-11663044AEDA} = {30A8080F-BD0A-438B-A42A-2B55F1EA924B}
 		{9EB3F788-22FF-4CBB-93D7-8F081812802F} = {30A8080F-BD0A-438B-A42A-2B55F1EA924B}
 		{41BFC663-34FE-4EC8-8580-57906E4D320C} = {683D0A8C-E5FC-43D5-9FE5-917F45835EDF}
+		{17DF8343-A1B1-4C81-AC3C-6474F8CD7F71} = {678124DC-D48F-4C44-9B70-53136DB175E3}
+		{544829B4-9EAC-4175-B5DD-6FBD59B9E8A3} = {678124DC-D48F-4C44-9B70-53136DB175E3}
 	EndGlobalSection
 EndGlobal

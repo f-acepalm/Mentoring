@@ -1,7 +1,11 @@
-﻿using PowerStateManagement;
+﻿using HtmlAgilityPack;
+using IanaUtilities;
+using PowerStateManagement;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,24 +14,27 @@ namespace ConsoleApp // Этот проект создан для быстрой
 {
     class Program
     {
+        private static string _address = @"https://www.iana.org/domains/root/db";
+
         static void Main(string[] args)
         {
-            //SYSTEM_POWER_INFORMATION spi;
-            //uint retval = CallNtPowerInformation(
-            //    SystemPowerInformation,
-            //    IntPtr.Zero,
-            //    0,
-            //    out spi,
-            //    Marshal.SizeOf(typeof(SYSTEM_POWER_INFORMATION))
-            //);
-            //if (retval == STATUS_SUCCESS)
-            //    Console.WriteLine(spi.TimeRemaining);
-            var powerManager = new PowerManager();
+            //HttpClient client = new HttpClient();
+            //var x = client.GetAsync(_address);
+            //x.Wait();
+            //HttpResponseMessage response = x.Result;
+            //response.EnsureSuccessStatusCode();
+            //var y = response.Content.ReadAsStringAsync();
+            //y.Wait();
+            //var html = y.Result;
 
-            //var x = powerManager.GetBatteryState();
-            powerManager.ReserveHibernationFile();
-            //Console.WriteLine(x);
-            Console.ReadLine();
+            //HtmlDocument hap = new HtmlDocument();
+            //hap.LoadHtml(html);
+            //HtmlNodeCollection nodes = hap.DocumentNode.SelectNodes("//table[@id='tld-table']//span[@class='domain tld']/a");
+            //if (nodes != null)
+            //    foreach (HtmlNode node in nodes)
+            //        Console.WriteLine(node.GetAttributeValue("href", null));
+
+            
         }
     }
 }

@@ -18,3 +18,6 @@ XmlTools/obj/
 XmlToolsTests/obj/
 XmlToolsTests/bin/
 PowerStateManagement/obj/
+IanaUtilitiesTests/obj/
+IanaUtilitiesTests/bin/
+IanaUtilities/obj/
