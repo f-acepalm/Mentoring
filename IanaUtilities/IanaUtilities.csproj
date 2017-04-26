@@ -46,6 +46,8 @@
     <Compile Include="DataProvider.cs" />
     <Compile Include="DomainInformation.cs" />
     <Compile Include="DomainRepositoryAsync.cs" />
+    <Compile Include="DomainRepositoryThreadPool.cs" />
+    <Compile Include="DomainRepositoryTPL.cs" />
     <Compile Include="IDomainRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

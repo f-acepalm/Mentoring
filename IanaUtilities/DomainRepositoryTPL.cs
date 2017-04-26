@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IanaUtilities
 {
-    public class DomainRepositoryAsync : IDomainRepository
+    public class DomainRepositoryTPL : IDomainRepository
     {
         private DataProvider _dataProvider = new DataProvider();
 
@@ -23,6 +23,17 @@ namespace IanaUtilities
             }
         }
 
+        private Dictionary<string, Task<string>> GetTasks(HttpClient client, IEnumerable<string> domains)
+        {
+            var tasks = new Dictionary<string, Task<string>>();
+            foreach (var domain in domains)
+            {
+                tasks.Add(domain, Task.Run(() => _dataProvider.GetWHOISServerName(domain, client)));
+            }
+
+            return tasks;
+        }
+
         private static IEnumerable<DomainInformation> GetResult(IEnumerable<string> domains, Dictionary<string, Task<string>> tasks)
         {
             var result = new List<DomainInformation>();
@@ -36,17 +47,6 @@ namespace IanaUtilities
             }
 
             return result;
-        }
-
-        private Dictionary<string, Task<string>> GetTasks(HttpClient client, IEnumerable<string> domains)
-        {
-            var tasks = new Dictionary<string, Task<string>>();
-            foreach (var domain in domains)
-            {
-                tasks.Add(domain, _dataProvider.GetWhoisServerNameAsync(domain, client));
-            }
-
-            return tasks;
         }
     }
 }
