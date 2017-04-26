@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IanaUtilities", "IanaUtilit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IanaUtilitiesTests", "IanaUtilitiesTests\IanaUtilitiesTests.csproj", "{544829B4-9EAC-4175-B5DD-6FBD59B9E8A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerStateManagementTests", "PowerStateManagementTests\PowerStateManagementTests.csproj", "{68BEECE4-BD13-469F-AA9F-8D42EFDF40D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{544829B4-9EAC-4175-B5DD-6FBD59B9E8A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{544829B4-9EAC-4175-B5DD-6FBD59B9E8A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{544829B4-9EAC-4175-B5DD-6FBD59B9E8A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68BEECE4-BD13-469F-AA9F-8D42EFDF40D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68BEECE4-BD13-469F-AA9F-8D42EFDF40D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68BEECE4-BD13-469F-AA9F-8D42EFDF40D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68BEECE4-BD13-469F-AA9F-8D42EFDF40D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,5 +104,6 @@ Global
 		{41BFC663-34FE-4EC8-8580-57906E4D320C} = {683D0A8C-E5FC-43D5-9FE5-917F45835EDF}
 		{17DF8343-A1B1-4C81-AC3C-6474F8CD7F71} = {678124DC-D48F-4C44-9B70-53136DB175E3}
 		{544829B4-9EAC-4175-B5DD-6FBD59B9E8A3} = {678124DC-D48F-4C44-9B70-53136DB175E3}
+		{68BEECE4-BD13-469F-AA9F-8D42EFDF40D7} = {683D0A8C-E5FC-43D5-9FE5-917F45835EDF}
 	EndGlobalSection
 EndGlobal
