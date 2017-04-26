@@ -28,7 +28,7 @@ namespace IanaUtilities
             var tasks = new Dictionary<string, Task<string>>();
             foreach (var domain in domains)
             {
-                tasks.Add(domain, Task.Run(() => _dataProvider.GetWHOISServerName(domain, client)));
+                tasks.Add(domain, Task.Run(() => _dataProvider.GetWhoisServerName(domain, client)));
             }
 
             return tasks;

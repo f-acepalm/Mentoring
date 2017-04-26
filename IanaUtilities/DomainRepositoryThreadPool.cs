@@ -47,7 +47,7 @@ namespace IanaUtilities
                 context.Result.Add(new DomainInformation
                 {
                     Name = context.Domain,
-                    WhoisServerName = _dataProvider.GetWHOISServerName(context.Domain, context.HttpClient)
+                    WhoisServerName = _dataProvider.GetWhoisServerName(context.Domain, context.HttpClient)
                 });
             }
             finally 

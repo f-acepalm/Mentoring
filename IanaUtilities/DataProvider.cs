@@ -46,7 +46,7 @@ namespace IanaUtilities
             }
         }
 
-        public string GetWHOISServerName(string domainName, HttpClient client)
+        public string GetWhoisServerName(string domainName, HttpClient client)
         {
             IdnMapping idn = new IdnMapping();
             var uri = $"{SiteUri}/{idn.GetAscii(domainName)}.html";
