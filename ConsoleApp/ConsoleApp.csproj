@@ -61,6 +61,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DownloadManager\DownloadManager.csproj">
+      <Project>{083C7F55-FD93-45C4-ADAC-1AA17A3B4061}</Project>
+      <Name>DownloadManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IanaUtilities\IanaUtilities.csproj">
       <Project>{17DF8343-A1B1-4C81-AC3C-6474F8CD7F71}</Project>
       <Name>IanaUtilities</Name>

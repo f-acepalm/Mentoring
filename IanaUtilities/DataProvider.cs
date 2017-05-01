@@ -37,6 +37,8 @@ namespace IanaUtilities
 
         public IEnumerable<string> GetAllDomains(HttpClient client)
         {
+            var x = client.SendAsync(new HttpRequestMessage(new HttpMethod("HEAD"), SiteUri)).Result;
+
             using (HttpResponseMessage response = client.GetAsync(SiteUri).Result)
             using (HttpContent content = response.Content)
             {

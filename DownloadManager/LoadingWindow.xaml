@@ -1,0 +1,22 @@
+﻿<Window x:Class="DownloadManager.LoadingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DownloadManager"
+        mc:Ignorable="d"
+        Title="LoadingWindow" Height="450" Width="800">
+    <Grid>
+        <Label Content="Process1:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="136" Height="38" FontSize="20"/>
+        <Label Content="Process2:" HorizontalAlignment="Left" Margin="10,53,0,0" VerticalAlignment="Top" Width="136" Height="38" FontSize="20"/>
+        <Label Content="Process3:" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top" Width="136" Height="38" FontSize="20"/>
+        <Label Content="Process5:" HorizontalAlignment="Left" Margin="10,177,0,0" VerticalAlignment="Top" Width="136" Height="38" FontSize="20"/>
+        <Label Content="Process4:" HorizontalAlignment="Left" Margin="10,139,0,0" VerticalAlignment="Top" Width="136" Height="38" FontSize="20"/>
+        <Label x:Name="StatusLabel1" Content="In process" HorizontalAlignment="Left" Margin="146,10,0,0" VerticalAlignment="Top" Width="136" Height="38" FontSize="20"/>
+        <Label x:Name="StatusLabel2" Content="In process" HorizontalAlignment="Left" Margin="146,53,0,0" VerticalAlignment="Top" Width="136" Height="38" FontSize="20"/>
+        <Label x:Name="StatusLabel3" Content="In process" HorizontalAlignment="Left" Margin="146,96,0,0" VerticalAlignment="Top" Width="136" Height="38" FontSize="20"/>
+        <Label x:Name="StatusLabel4" Content="In process" HorizontalAlignment="Left" Margin="146,139,0,0" VerticalAlignment="Top" Width="136" Height="38" FontSize="20"/>
+        <Label x:Name="StatusLabel5" Content="In process" HorizontalAlignment="Left" Margin="146,177,0,0" VerticalAlignment="Top" Width="136" Height="38" FontSize="20"/>
+
+    </Grid>
+</Window>
