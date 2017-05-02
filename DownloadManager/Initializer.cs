@@ -13,7 +13,7 @@ namespace DownloadManager
 
         public async Task Initialize(ContentControl control)
         {
-            await Task.Delay(1000 + _random.Next(10000));
+            await Task.Delay(1000 + _random.Next(5000));
             control.Content = "Done";
         }
     }

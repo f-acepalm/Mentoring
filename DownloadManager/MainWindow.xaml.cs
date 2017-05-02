@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,8 +21,9 @@ namespace DownloadManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly Downloader _downloader;
         private const string DownloadDirectory = "Download";
+        private readonly Downloader _downloader;
+        private CancellationTokenSource _cancellationTokenSource;
 
         public MainWindow()
         {
@@ -40,22 +42,51 @@ namespace DownloadManager
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
+            _cancellationTokenSource = new CancellationTokenSource();
             var uri = UrlTexBox.Text;
-            DownloadButton.Visibility = Visibility.Collapsed;
-            CancelButton.Visibility = Visibility.Visible;
+            try
+            {
+                DownloadButton.Visibility = Visibility.Collapsed;
+                CancelButton.Visibility = Visibility.Visible;
+                RunProgressBar();
+                await _downloader.DownloadPageAsync(new Uri(uri), _cancellationTokenSource.Token);
+                StopProgressBar();
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            finally
+            {
+                DownloadButton.Visibility = Visibility.Visible;
+                CancelButton.Visibility = Visibility.Collapsed;
+            }
+        }
 
-            await _downloader.DownloadPageAsync(new Uri(uri));
+        private void StopProgressBar()
+        {
+            _cancellationTokenSource.Cancel();
+        }
 
-            DownloadButton.Visibility = Visibility.Visible;
-            CancelButton.Visibility = Visibility.Collapsed;
+        private async void RunProgressBar()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                ProgressBar.Value++;
+                await Task.Delay(50);
+                if (_cancellationTokenSource.Token.IsCancellationRequested)
+                {
+                    ProgressBar.Value = 0;
+                    break;
+                }
+            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            DownloadButton.Visibility = Visibility.Visible;
-            CancelButton.Visibility = Visibility.Collapsed;
-
-            _downloader.CancelDownloading();
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Cancel();
+            }
         }
     }
 }

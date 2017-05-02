@@ -9,43 +9,33 @@ namespace _10Operations
 {
     class Program
     {
-        private static SemaphoreSlim semaphore;
+        private static SemaphoreSlim _semaphore = new SemaphoreSlim(2, 2);
+        private static Thread[] threads = new Thread[10];
 
         public static void Main(string[] arg)
         {
-            semaphore = new SemaphoreSlim(0, 2);
-            Thread[] threads = new Thread[5];
-
             for (int i = 0; i < threads.Length; i++)
             {
-                threads[i] = new Thread(() => {
-                    Console.WriteLine($"Operation #{Thread.CurrentThread.ManagedThreadId} is waiting for the semaphore.");
-
-                    semaphore.Wait();
-
-                    Console.WriteLine($"Operation #{Thread.CurrentThread.ManagedThreadId} enters the semaphore.");
-
-                    Thread.Sleep(2000);
-
-                    Console.WriteLine($"Operation #{Thread.CurrentThread.ManagedThreadId} releases the semaphore; previous count: {semaphore.Release()}.");
-                });
-
+                threads[i] = new Thread(() => Operation());
                 threads[i].Start();
             }
 
-            Thread.Sleep(1000);
-
-            Console.Write("Main thread calls Release(2) --> ");
-            semaphore.Release(2);
-            Console.WriteLine($"{semaphore.CurrentCount} tasks can enter the semaphore.");
-
-            for (int i = 0; i < threads.Length; i++)
+            foreach (var item in threads)
             {
-                threads[i].Join();
+                item.Join();
             }
 
-            Console.WriteLine("Main thread exits.");
-            Console.ReadLine();
+            Console.WriteLine("Done");
+        }
+
+        private static void Operation()
+        {
+            Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId} is waiting");
+            _semaphore.Wait();
+            Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId} started");
+            Thread.Sleep(3000);
+            _semaphore.Release();
+            Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId} is finished");
         }
     }
 }

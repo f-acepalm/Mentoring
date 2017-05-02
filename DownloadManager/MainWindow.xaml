@@ -8,7 +8,8 @@
         Title="DownloadManager" Height="450" Width="800">
     <Grid Margin="0,0,-0.4,0.2">
         <Button x:Name="DownloadButton" Content="Download" HorizontalAlignment="Left" Height="23" Margin="531,10,0,0" VerticalAlignment="Top" Width="102" Click="DownloadButton_Click"/>
-        <TextBox x:Name="UrlTexBox" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="516"/>
+        <TextBox x:Name="UrlTexBox" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="516" Text="https://www.iana.org/domains/root/db"/>
         <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="638,10,0,0" VerticalAlignment="Top" Width="94" Height="23" Visibility="Collapsed" Click="CancelButton_Click"/>
+        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="91" Margin="10,91,0,0" VerticalAlignment="Top" Width="755"/>
     </Grid>
 </Window>

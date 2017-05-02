@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DownloadManager
@@ -11,19 +12,27 @@ namespace DownloadManager
     internal class Downloader
     {
         private readonly string _downloadDirectory;
+        private bool _downloadingWasCanceled;
 
         public Downloader(string downloadDirectory)
         {
             _downloadDirectory = downloadDirectory;
         }
 
-        public async Task DownloadPageAsync(Uri uri)
+        public async Task DownloadPageAsync(Uri uri, CancellationToken cancellationToken)
         {
             using (HttpClient client = new HttpClient())
-            using (HttpResponseMessage response = await client.GetAsync(uri))
+            using (HttpResponseMessage response = await client.GetAsync(uri, cancellationToken))
             using (HttpContent content = response.Content)
             {
                 var data = await content.ReadAsStringAsync();
+
+                if (_downloadingWasCanceled)
+                {
+                    _downloadingWasCanceled = false;
+                    return;
+                }
+
                 if (!Directory.Exists(_downloadDirectory))
                 {
                     Directory.CreateDirectory(_downloadDirectory);
@@ -35,6 +44,7 @@ namespace DownloadManager
 
         public void CancelDownloading()
         {
+            _downloadingWasCanceled = true;
         }
 
         private string GetFileName(Uri uri)
