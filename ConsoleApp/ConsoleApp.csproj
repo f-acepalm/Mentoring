@@ -69,6 +69,10 @@
       <Project>{17DF8343-A1B1-4C81-AC3C-6474F8CD7F71}</Project>
       <Name>IanaUtilities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ImageJoiner\ImageProcessing.csproj">
+      <Project>{64C05FEC-226E-4F2F-84D3-E476539D4285}</Project>
+      <Name>ImageProcessing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PowerStateManagement\PowerStateManagement.csproj">
       <Project>{41BFC663-34FE-4EC8-8580-57906E4D320C}</Project>
       <Name>PowerStateManagement</Name>

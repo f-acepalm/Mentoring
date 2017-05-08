@@ -47,6 +47,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContinuationTasks", "Contin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "10Operations", "10Operations\10Operations.csproj", "{FDCF4C3C-EEBB-4AFE-90A8-DCF1DCA4D508}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5_Windows_Services", "5_Windows_Services", "{CF2B82D5-020F-4AC2-92B3-FDE937D9F52B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageProcessing", "ImageJoiner\ImageProcessing.csproj", "{64C05FEC-226E-4F2F-84D3-E476539D4285}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageJoinerService", "ImageJoinerService\ImageJoinerService.csproj", "{E3081522-B7A1-4EA2-BF23-B3D01F3D8D17}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SC", "SC", "{A9C7976D-5580-4C46-A66F-B3967B7C1137}"
+	ProjectSection(SolutionItems) = preProject
+		SC\install.cmd = SC\install.cmd
+		SC\start.cmd = SC\start.cmd
+		SC\stop.cmd = SC\stop.cmd
+		SC\uninstall.cmd = SC\uninstall.cmd
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +135,14 @@ Global
 		{FDCF4C3C-EEBB-4AFE-90A8-DCF1DCA4D508}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDCF4C3C-EEBB-4AFE-90A8-DCF1DCA4D508}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDCF4C3C-EEBB-4AFE-90A8-DCF1DCA4D508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64C05FEC-226E-4F2F-84D3-E476539D4285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64C05FEC-226E-4F2F-84D3-E476539D4285}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64C05FEC-226E-4F2F-84D3-E476539D4285}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64C05FEC-226E-4F2F-84D3-E476539D4285}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3081522-B7A1-4EA2-BF23-B3D01F3D8D17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3081522-B7A1-4EA2-BF23-B3D01F3D8D17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3081522-B7A1-4EA2-BF23-B3D01F3D8D17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3081522-B7A1-4EA2-BF23-B3D01F3D8D17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,5 +164,7 @@ Global
 		{9D828D60-6439-45B9-80ED-7CE31B95B073} = {2B73EBAC-4232-481C-BF4D-59F3E50E6A25}
 		{172F3C70-2688-4DC0-9EBB-A687ED5941D5} = {2B73EBAC-4232-481C-BF4D-59F3E50E6A25}
 		{FDCF4C3C-EEBB-4AFE-90A8-DCF1DCA4D508} = {2B73EBAC-4232-481C-BF4D-59F3E50E6A25}
+		{64C05FEC-226E-4F2F-84D3-E476539D4285} = {CF2B82D5-020F-4AC2-92B3-FDE937D9F52B}
+		{E3081522-B7A1-4EA2-BF23-B3D01F3D8D17} = {CF2B82D5-020F-4AC2-92B3-FDE937D9F52B}
 	EndGlobalSection
 EndGlobal
