@@ -61,6 +61,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SC", "SC", "{A9C7976D-5580-
 		SC\uninstall.cmd = SC\uninstall.cmd
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6_Message_Queues", "6_Message_Queues", "{1104832C-8E55-48DD-A046-DD19283430D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

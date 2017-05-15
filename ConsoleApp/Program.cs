@@ -2,6 +2,8 @@
 using HtmlAgilityPack;
 using IanaUtilities;
 using ImageProcessing;
+using Microsoft.ServiceBus;
+using Microsoft.ServiceBus.Messaging;
 using PowerStateManagement;
 using System;
 using System.Collections.Generic;
@@ -18,15 +20,24 @@ namespace ConsoleApp // Этот проект создан для быстрой
 {
     class Program
     {
-        private static string _outputDir = @"Output";
-        private static string _inputDir = @"Images";
+        private static string queueName = @"Test4";
 
         static void Main(string[] args)
         {
-            var path = @"D:\work\Mentoring\Mentoring\ImageJoinerService\bin\Debug\Output\ProcessedImages\image_3.png";
-            var x = new PdfGenerator(_outputDir);
-            x.AddImage(path);
-            x.CompleteFile();
+            var nsManager = NamespaceManager.Create();
+            if (!nsManager.QueueExists(queueName))
+            {
+                nsManager.CreateQueue(queueName);
+            }
+
+            var client = QueueClient.Create(queueName);
+            client.Send(new BrokeredMessage("lol"));
+            //QueueClient client = QueueClient.Create(queueName, ReceiveMode.ReceiveAndDelete);
+
+            //var message = client.Receive();
+            //var data = message.GetBody<string>();
+
+            //client.Close();
         }
     }
 }
