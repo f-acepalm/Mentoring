@@ -4,6 +4,8 @@ using IanaUtilities;
 using ImageProcessing;
 using Microsoft.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.Rendering;
 using PowerStateManagement;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,8 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -20,24 +24,32 @@ namespace ConsoleApp // Этот проект создан для быстрой
 {
     class Program
     {
-        private static string queueName = @"Test4";
+        private static string queueName = @"ServerQueue";
 
         static void Main(string[] args)
         {
-            var nsManager = NamespaceManager.Create();
-            if (!nsManager.QueueExists(queueName))
-            {
-                nsManager.CreateQueue(queueName);
-            }
+            QueueClient client = QueueClient.Create(queueName, ReceiveMode.ReceiveAndDelete);
+            var message = client.Receive();
+            var data = message.GetBody<byte[]>();
 
-            var client = QueueClient.Create(queueName);
-            client.Send(new BrokeredMessage("lol"));
-            //QueueClient client = QueueClient.Create(queueName, ReceiveMode.ReceiveAndDelete);
+            File.WriteAllBytes(@"D:\work\Mentoring\Mentoring\ImageJoinerService\bin\Debug\Output\test.pdf", data);
 
-            //var message = client.Receive();
-            //var data = message.GetBody<string>();
+            client.Close();
 
-            //client.Close();
+            //var generator = new PdfGenerator("test");
+            //generator.AddImage(@"D:\work\Mentoring\Mentoring\ImageJoinerService\bin\Debug\Output\ProcessedImages\image_0.jpg");
+
+            //var stream = new MemoryStream();
+            //var render = new PdfDocumentRenderer();
+            //render.Document = generator.CurrentDocument;
+            //render.RenderDocument();
+            //render.Save(stream, false);
+
+            //var queueClient = QueueClient.Create(queueName);
+            //var message = new BrokeredMessage(stream.ToArray());
+
+            //queueClient.Send(message);
+            //queueClient.Close();
         }
     }
 }

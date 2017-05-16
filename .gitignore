@@ -36,3 +36,7 @@ ImageJoinerService/bin/
 ImageJoinerService/obj/
 ImageJoiner/obj/
 ImageJoiner/bin/
+Server/obj/
+ServerService/obj/
+Server/bin/
+ServerService/bin/
