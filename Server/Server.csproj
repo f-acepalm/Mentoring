@@ -51,5 +51,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImageJoiner\ImageProcessing.csproj">
+      <Project>{64C05FEC-226E-4F2F-84D3-E476539D4285}</Project>
+      <Name>ImageProcessing</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.ServiceBus;
+using Microsoft.ServiceBus.Messaging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,13 +23,19 @@ namespace ImageProcessing
         private AutoResetEvent _newFileAdded;
         private PdfGenerator _pdfGenerator;
         private int _previousFileNumber = -1;
+        private Thread _updateStatusThread;
+        private string _settingsQueueName = "SettingsQueue";
+        private string _statusQueueName = "StatusQueue";
+        private int _statusUpdateTimeout = 5000;
+        private string _name;
 
-        public ImageJoiner(string inputDirectory, string outputDirectory)
+        public ImageJoiner(string inputDirectory, string outputDirectory, string name)
         {
             _inputDirectory = inputDirectory;
             _outputDirectory = outputDirectory;
             _processedImagesDirectory = Path.Combine(outputDirectory, "ProcessedImages");
             _brokenFilesDirectory = Path.Combine(outputDirectory, "BrokenImages");
+            _name = name;
 
             if (!Directory.Exists(inputDirectory))
             {
@@ -49,8 +57,15 @@ namespace ImageProcessing
                 Directory.CreateDirectory(_brokenFilesDirectory);
             }
 
+            var nsManager = NamespaceManager.Create();
+            if (!nsManager.QueueExists(_statusQueueName))
+            {
+                nsManager.CreateQueue(_statusQueueName);
+            }
+
             _pdfGenerator = new PdfGenerator(outputDirectory);
             _workingThread = new Thread(WorkProcedure);
+            _updateStatusThread = new Thread(UpdateStatusProcedure);
             _workStoped = new ManualResetEvent(false);
             _newFileAdded = new AutoResetEvent(false);
 
@@ -61,6 +76,7 @@ namespace ImageProcessing
         public void Start()
         {
             _workingThread.Start();
+            _updateStatusThread.Start();
             _watcher.EnableRaisingEvents = true;
         }
 
@@ -80,6 +96,7 @@ namespace ImageProcessing
             finally
             {
                 _workingThread.Join();
+                _updateStatusThread.Join();
             }
         }
 
@@ -91,6 +108,26 @@ namespace ImageProcessing
             }
         }
 
+        private void UpdateStatusProcedure()
+        {
+            var queueClient = QueueClient.Create(_statusQueueName);
+            do
+            {
+                var message = new BrokeredMessage(new ImageJoinerStatus
+                {
+                    ServiceName = _name,
+                    LastFileNumber = _previousFileNumber,
+                    CurrentDate = DateTime.Now,
+                    UpdateStatusTimeout = _statusUpdateTimeout
+                });
+                queueClient.Send(message);
+                Thread.Sleep(_statusUpdateTimeout);
+            }
+            while (!_workStoped.WaitOne(0));
+
+            queueClient.Close();
+        }
+
         private void WorkProcedure()
         {
             do
@@ -98,7 +135,7 @@ namespace ImageProcessing
                 foreach (var filePath in Directory.EnumerateFiles(_inputDirectory))
                 {
                     if (_workStoped.WaitOne(TimeSpan.Zero))
-                    { 
+                    {
                         return;
                     }
 

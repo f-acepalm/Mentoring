@@ -37,7 +37,7 @@ namespace ImageJoinerService
                 conf => conf.Service<ImageJoiner>(
                     serv =>
                     {
-                        serv.ConstructUsing(() => new ImageJoiner(Path.Combine(currentDir, _inputDir), Path.Combine(currentDir, _outputDir)));
+                        serv.ConstructUsing(() => new ImageJoiner(Path.Combine(currentDir, _inputDir), Path.Combine(currentDir, _outputDir), "facepalm"));
                         serv.WhenStarted(s => s.Start());
                         serv.WhenStopped(s => s.Stop());
                     }).UseNLog(logFactory)

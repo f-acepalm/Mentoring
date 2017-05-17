@@ -1,12 +1,15 @@
-﻿using Microsoft.ServiceBus;
+﻿using ImageProcessing;
+using Microsoft.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Server
 {
@@ -14,17 +17,33 @@ namespace Server
     {
         private string _outputDirectory;
         private Thread _workingThread;
-        private bool _isworkStoped;
         private string _queueName = "ServerQueue";
+        private string _statusQueueName = "StatusQueue";
+        private string _settingsQueueName = "SettingsQueue";
         private int _currentFileNumber;
+        private string _statusDirectory;
+        private Thread _getStatusThread;
+        private FileSystemWatcher _watcher;
+        private string _settingsFilePath;
+        private Thread _sendSettingsThread;
+        private ManualResetEvent _workStoped;
+        private AutoResetEvent _settingsChanged;
 
         public DocumentServer(string outputDirectory)
         {
             _outputDirectory = outputDirectory;
+            _statusDirectory = Path.Combine(outputDirectory, "Statuses");
+            _settingsFilePath = Path.Combine(outputDirectory, "Settings.xml");
             if (!Directory.Exists(outputDirectory))
             {
                 Directory.CreateDirectory(outputDirectory);
             }
+
+            if (!Directory.Exists(_statusDirectory))
+            {
+                Directory.CreateDirectory(_statusDirectory);
+            }
+
             var nsManager = NamespaceManager.Create();
 
             if (!nsManager.QueueExists(_queueName))
@@ -32,25 +51,70 @@ namespace Server
                 nsManager.CreateQueue(_queueName);
             }
 
+            if (!nsManager.QueueExists(_settingsQueueName))
+            {
+                nsManager.CreateQueue(_settingsQueueName);
+            }
+
+            _workStoped = new ManualResetEvent(false);
+            _settingsChanged = new AutoResetEvent(false);
+            _watcher = new FileSystemWatcher(Path.GetDirectoryName(_settingsFilePath));
+            _watcher.Filter = Path.GetFileName(_settingsFilePath);
+            _watcher.Changed += OnFileChanged;
+
             _workingThread = new Thread(WorkProcedure);
-        }
+            _getStatusThread = new Thread(GetStatusProcedure);
+            _sendSettingsThread = new Thread(SendSettingsProcedure);
+        }        
 
         public void Start()
         {
-            _isworkStoped = false;
             _workingThread.Start();
+            _getStatusThread.Start();
+            _sendSettingsThread.Start();
+            _watcher.EnableRaisingEvents = true;
         }
 
         public void Stop()
         {
-            _isworkStoped = true;
+            _watcher.EnableRaisingEvents = false;
+            _workStoped.Set();
             _workingThread.Join();
+            _getStatusThread.Join();
+            _sendSettingsThread.Join();
+        }
+
+        private void OnFileChanged(object sender, FileSystemEventArgs e)
+        {
+            _settingsChanged.Set();
+        }
+
+        private void SendSettingsProcedure()
+        {
+            while (WaitHandle.WaitAny(new WaitHandle[] { _workStoped, _settingsChanged }) != 0)
+            {
+                var queueClient = QueueClient.Create(_settingsQueueName);
+                var message = new BrokeredMessage(GetSettings());
+                queueClient.Send(message);
+                queueClient.Close();
+            }
+        }
+
+        private ImageJoinerSettings GetSettings()
+        {
+            using (var fs = new FileStream(_settingsFilePath, FileMode.Open))
+            {
+                var reader = XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
+                var serializer = new DataContractSerializer(typeof(ImageJoinerSettings));
+
+                return (ImageJoinerSettings)serializer.ReadObject(reader); 
+            }
         }
 
         private void WorkProcedure()
         {
             QueueClient client = QueueClient.Create(_queueName, ReceiveMode.ReceiveAndDelete);
-            while (!_isworkStoped)
+            while (!_workStoped.WaitOne(0))
             {
                 var message = client.Receive();
                 if (message != null)
@@ -60,6 +124,31 @@ namespace Server
             }
 
             client.Close();
+        }
+
+        private void GetStatusProcedure()
+        {
+            QueueClient client = QueueClient.Create(_statusQueueName, ReceiveMode.ReceiveAndDelete);
+            while (!_workStoped.WaitOne(0))
+            {
+                var message = client.Receive();
+                if (message != null)
+                {
+                    ProcessStatusMessage(message);
+                }
+            }
+
+            client.Close();
+        }
+
+        private void ProcessStatusMessage(BrokeredMessage message)
+        {
+            var data = message.GetBody<ImageJoinerStatus>();
+            var serializer = new DataContractSerializer(typeof(ImageJoinerStatus));
+            using (var stream = new FileStream(Path.Combine(_statusDirectory, $"{data.ServiceName}Status.xml"), FileMode.Create))
+            {
+                serializer.WriteObject(stream, data);
+            }
         }
 
         private void ProcessMessage(BrokeredMessage message)

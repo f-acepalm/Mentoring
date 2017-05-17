@@ -25,31 +25,35 @@ namespace ConsoleApp // Этот проект создан для быстрой
     class Program
     {
         private static string queueName = @"ServerQueue";
+        private static string _statusQueueName = "StatusQueue";
 
         static void Main(string[] args)
         {
-            QueueClient client = QueueClient.Create(queueName, ReceiveMode.ReceiveAndDelete);
-            var message = client.Receive();
-            var data = message.GetBody<byte[]>();
-
-            File.WriteAllBytes(@"test.pdf", data);
-
-            client.Close();
-
-            //var generator = new PdfGenerator("test");
-            //generator.AddImage(@"D:\work\Mentoring\Mentoring\ImageJoinerService\bin\Debug\Output\ProcessedImages\image_0.jpg");
-
-            //var stream = new MemoryStream();
-            //var render = new PdfDocumentRenderer();
-            //render.Document = generator.CurrentDocument;
-            //render.RenderDocument();
-            //render.Save(stream, false);
-
-            //var queueClient = QueueClient.Create(queueName);
-            //var message = new BrokeredMessage(stream.ToArray());
+            //var queueClient = QueueClient.Create(_statusQueueName);
+            //var message = new BrokeredMessage(new ImageJoinerStatus { LastFileNumber = 10, ServiceName = "test" });
 
             //queueClient.Send(message);
             //queueClient.Close();
+
+
+            //QueueClient client = QueueClient.Create(_statusQueueName, ReceiveMode.ReceiveAndDelete);
+            //message = client.Receive();
+            //var data = message.GetBody<ImageJoinerStatus>();
+
+            //var ser = new DataContractSerializer(typeof(ImageJoinerStatus));
+            //using (var stream = new FileStream($"{data.ServiceName}Settings.xml", FileMode.Create))
+            //{
+            //    ser.WriteObject(stream, data); 
+            //}
+
+            //client.Close();     
+
+
+            var ser = new DataContractSerializer(typeof(ImageJoinerSettings));
+            using (var stream = new FileStream($"Settingsssss.xml", FileMode.Create))
+            {
+                ser.WriteObject(stream, new ImageJoinerSettings() { UpdateStatusTimeout = 40 });
+            }
         }
     }
 }
