@@ -25,9 +25,9 @@ namespace Server
         private Thread _getStatusThread;
         private FileSystemWatcher _watcher;
         private string _settingsFilePath;
-        private Thread _sendSettingsThread;
+        //private Thread _sendSettingsThread;
         private ManualResetEvent _workStoped;
-        private AutoResetEvent _settingsChanged;
+        //private AutoResetEvent _settingsChanged;
 
         public DocumentServer(string outputDirectory)
         {
@@ -57,21 +57,22 @@ namespace Server
             }
 
             _workStoped = new ManualResetEvent(false);
-            _settingsChanged = new AutoResetEvent(false);
+            //_settingsChanged = new AutoResetEvent(false);
             _watcher = new FileSystemWatcher(Path.GetDirectoryName(_settingsFilePath));
-            _watcher.Filter = Path.GetFileName(_settingsFilePath);
+            _watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+            _watcher.Filter = Path.GetFileName(_settingsFilePath); // если фильтровать, то не видит файл, а если не фильтровать, то видит
             _watcher.Changed += OnFileChanged;
 
             _workingThread = new Thread(WorkProcedure);
             _getStatusThread = new Thread(GetStatusProcedure);
-            _sendSettingsThread = new Thread(SendSettingsProcedure);
-        }        
+            //_sendSettingsThread = new Thread(SendSettingsProcedure);
+        }
 
         public void Start()
         {
             _workingThread.Start();
             _getStatusThread.Start();
-            _sendSettingsThread.Start();
+            //_sendSettingsThread.Start();
             _watcher.EnableRaisingEvents = true;
         }
 
@@ -81,28 +82,31 @@ namespace Server
             _workStoped.Set();
             _workingThread.Join();
             _getStatusThread.Join();
-            _sendSettingsThread.Join();
+            //_sendSettingsThread.Join();
         }
 
         private void OnFileChanged(object sender, FileSystemEventArgs e)
         {
-            _settingsChanged.Set();
+            var queueClient = QueueClient.Create(_settingsQueueName);
+            var message = new BrokeredMessage(GetSettings());
+            queueClient.Send(message);
+            queueClient.Close();
         }
 
-        private void SendSettingsProcedure()
-        {
-            while (WaitHandle.WaitAny(new WaitHandle[] { _workStoped, _settingsChanged }) != 0)
-            {
-                var queueClient = QueueClient.Create(_settingsQueueName);
-                var message = new BrokeredMessage(GetSettings());
-                queueClient.Send(message);
-                queueClient.Close();
-            }
-        }
+        //private void SendSettingsProcedure()
+        //{
+        //    while (WaitHandle.WaitAny(new WaitHandle[] { _workStoped, _settingsChanged }) != 0)
+        //    {
+        //        var queueClient = QueueClient.Create(_settingsQueueName);
+        //        var message = new BrokeredMessage(GetSettings());
+        //        queueClient.Send(message);
+        //        queueClient.Close();
+        //    }
+        //}
 
         private ImageJoinerSettings GetSettings()
         {
-            using (var fs = new FileStream(_settingsFilePath, FileMode.Open))
+            using (var fs = new FileStream(_settingsFilePath, FileMode.Open)) // а тут падает эксепшен, что не видит файл, но если скопировать ссылку из ексепшена, то файл из нее существует
             {
                 var reader = XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
                 var serializer = new DataContractSerializer(typeof(ImageJoinerSettings));

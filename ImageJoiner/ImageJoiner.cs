@@ -28,6 +28,7 @@ namespace ImageProcessing
         private string _statusQueueName = "StatusQueue";
         private int _statusUpdateTimeout = 5000;
         private string _name;
+        private Thread _getSettingsThread;
 
         public ImageJoiner(string inputDirectory, string outputDirectory, string name)
         {
@@ -66,6 +67,7 @@ namespace ImageProcessing
             _pdfGenerator = new PdfGenerator(outputDirectory);
             _workingThread = new Thread(WorkProcedure);
             _updateStatusThread = new Thread(UpdateStatusProcedure);
+            _getSettingsThread = new Thread(GetSettingsProcedure);
             _workStoped = new ManualResetEvent(false);
             _newFileAdded = new AutoResetEvent(false);
 
@@ -77,6 +79,7 @@ namespace ImageProcessing
         {
             _workingThread.Start();
             _updateStatusThread.Start();
+            _getSettingsThread.Start();
             _watcher.EnableRaisingEvents = true;
         }
 
@@ -97,6 +100,7 @@ namespace ImageProcessing
             {
                 _workingThread.Join();
                 _updateStatusThread.Join();
+                _getSettingsThread.Join();
             }
         }
 
@@ -106,6 +110,27 @@ namespace ImageProcessing
             {
                 MoveFile(filePath, Path.Combine(_brokenFilesDirectory, Path.GetFileName(filePath)));
             }
+        }
+
+        private void GetSettingsProcedure()
+        {
+            QueueClient client = QueueClient.Create(_settingsQueueName, ReceiveMode.ReceiveAndDelete);
+            while (!_workStoped.WaitOne(0))
+            {
+                var message = client.Receive();
+                if (message != null)
+                {
+                    ProcessSettingsMessage(message);
+                }
+            }
+
+            client.Close();
+        }
+
+        private void ProcessSettingsMessage(BrokeredMessage message)
+        {
+            var data = message.GetBody<ImageJoinerSettings>();
+            _statusUpdateTimeout = data.UpdateStatusTimeout;
         }
 
         private void UpdateStatusProcedure()
