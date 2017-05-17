@@ -32,7 +32,7 @@ namespace ConsoleApp // Этот проект создан для быстрой
             var message = client.Receive();
             var data = message.GetBody<byte[]>();
 
-            File.WriteAllBytes(@"D:\work\Mentoring\Mentoring\ImageJoinerService\bin\Debug\Output\test.pdf", data);
+            File.WriteAllBytes(@"test.pdf", data);
 
             client.Close();
 

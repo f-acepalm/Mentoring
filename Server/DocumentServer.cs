@@ -16,6 +16,7 @@ namespace Server
         private Thread _workingThread;
         private bool _isworkStoped;
         private string _queueName = "ServerQueue";
+        private int _currentFileNumber;
 
         public DocumentServer(string outputDirectory)
         {
@@ -63,8 +64,8 @@ namespace Server
 
         private void ProcessMessage(BrokeredMessage message)
         {
-            var data = message.GetBody<string>();
-            Console.WriteLine("{0} - {1}", message.MessageId, data);
+            var data = message.GetBody<byte[]>();
+            File.WriteAllBytes(Path.Combine(_outputDirectory, $"Result{++_currentFileNumber}.pdf"), data);
         }
     }
 }

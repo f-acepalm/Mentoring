@@ -70,7 +70,7 @@ namespace ImageProcessing
             {
                 _watcher.EnableRaisingEvents = false;
                 _workStoped.Set();
-                _pdfGenerator.CompleteFile();
+                _pdfGenerator.CompleteFileWithQueue();
             }
             catch (OutOfMemoryException)
             {
@@ -140,7 +140,7 @@ namespace ImageProcessing
             {
                 if (_previousFileNumber >= 0 && fileNumber - _previousFileNumber != 1)
                 {
-                    _pdfGenerator.CompleteFile();
+                    _pdfGenerator.CompleteFileWithQueue();
                 }
             }
             catch (OutOfMemoryException)

@@ -1,4 +1,5 @@
-﻿using MigraDoc.DocumentObjectModel;
+﻿using Microsoft.ServiceBus.Messaging;
+using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Shapes;
 using MigraDoc.Rendering;
 using System;
@@ -16,6 +17,7 @@ namespace ImageProcessing
         private Document _currentDocument;
         private Section _currentSection;
         private int _currentOutputFileNumber;
+        private string _queueName = "ServerQueue";
 
         public List<string> AddedImages { get; set; }
 
@@ -53,6 +55,21 @@ namespace ImageProcessing
             render.Document = _currentDocument;
             render.RenderDocument();
             render.Save(Path.Combine(_outputDirectory, $"Result{++_currentOutputFileNumber}.pdf"));
+            StartNewDocument();
+        }
+
+        public void CompleteFileWithQueue()
+        {
+            var render = new PdfDocumentRenderer();
+            render.Document = _currentDocument;
+            render.RenderDocument();
+            var stream = new MemoryStream();
+            render.Save(stream, false);
+
+            var queueClient = QueueClient.Create(_queueName);
+            var message = new BrokeredMessage(stream.ToArray());
+            queueClient.Send(message);
+            queueClient.Close();
             StartNewDocument();
         }
 
