@@ -40,3 +40,6 @@ Server/obj/
 ServerService/obj/
 Server/bin/
 ServerService/bin/
+WindowsAppMemoryLeak/obj/
+Optimization/obj/
+Optimization/bin/

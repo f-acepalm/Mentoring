@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.3
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassMapperTests", "ClassMapperTests\ClassMapperTests.csproj", "{41E346B6-CA26-4AEE-BF99-FF095C4980D6}"
 EndProject
@@ -70,6 +70,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerService", "ServerService\ServerService.csproj", "{E7804307-E508-469D-8C91-8F674019EC62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{6DB184D2-B1AF-4851-B814-4FE76B9F1B7E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7_Optimization", "7_Optimization", "{5C159F0D-DA97-4742-9CBE-A0DD9749604A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optimization", "Optimization\Optimization.csproj", "{821D4748-3FC3-4164-88C9-BA5FC16AA0BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsAppMemoryLeak", "WindowsAppMemoryLeak\WindowsAppMemoryLeak.csproj", "{D2782DBB-73BA-4BAC-9F47-EACC00367E2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -161,6 +167,14 @@ Global
 		{6DB184D2-B1AF-4851-B814-4FE76B9F1B7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DB184D2-B1AF-4851-B814-4FE76B9F1B7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DB184D2-B1AF-4851-B814-4FE76B9F1B7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{821D4748-3FC3-4164-88C9-BA5FC16AA0BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{821D4748-3FC3-4164-88C9-BA5FC16AA0BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{821D4748-3FC3-4164-88C9-BA5FC16AA0BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{821D4748-3FC3-4164-88C9-BA5FC16AA0BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2782DBB-73BA-4BAC-9F47-EACC00367E2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2782DBB-73BA-4BAC-9F47-EACC00367E2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2782DBB-73BA-4BAC-9F47-EACC00367E2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2782DBB-73BA-4BAC-9F47-EACC00367E2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,5 +200,7 @@ Global
 		{E3081522-B7A1-4EA2-BF23-B3D01F3D8D17} = {CF2B82D5-020F-4AC2-92B3-FDE937D9F52B}
 		{E7804307-E508-469D-8C91-8F674019EC62} = {1104832C-8E55-48DD-A046-DD19283430D5}
 		{6DB184D2-B1AF-4851-B814-4FE76B9F1B7E} = {1104832C-8E55-48DD-A046-DD19283430D5}
+		{821D4748-3FC3-4164-88C9-BA5FC16AA0BF} = {5C159F0D-DA97-4742-9CBE-A0DD9749604A}
+		{D2782DBB-73BA-4BAC-9F47-EACC00367E2F} = {5C159F0D-DA97-4742-9CBE-A0DD9749604A}
 	EndGlobalSection
 EndGlobal
