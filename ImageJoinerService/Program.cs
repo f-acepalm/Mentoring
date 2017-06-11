@@ -10,6 +10,7 @@ using Topshelf;
 using NLog.Config;
 using NLog.Targets;
 using NLog;
+using Castle.DynamicProxy;
 
 namespace ImageJoinerService
 {
@@ -32,12 +33,16 @@ namespace ImageJoinerService
             logConfig.AddTarget(target);
             logConfig.AddRuleForAllLevels(target);
 
+            var imageJoiner = new ImageJoiner(Path.Combine(currentDir, _inputDir), Path.Combine(currentDir, _outputDir), "facepalm");
+            var generator = new ProxyGenerator();
+            var imageJoinerProxy = generator.CreateInterfaceProxyWithTarget<IImageJoiner>(imageJoiner, new LoggingProxy());
+
             var logFactory = new LogFactory(logConfig);
             HostFactory.Run(
-                conf => conf.Service<ImageJoiner>(
+                conf => conf.Service<IImageJoiner>(
                     serv =>
                     {
-                        serv.ConstructUsing(() => new ImageJoiner(Path.Combine(currentDir, _inputDir), Path.Combine(currentDir, _outputDir), "facepalm"));
+                        serv.ConstructUsing(() => imageJoinerProxy);
                         serv.WhenStarted(s => s.Start());
                         serv.WhenStopped(s => s.Stop());
                     }).UseNLog(logFactory)

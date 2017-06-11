@@ -1,4 +1,5 @@
-﻿using DownloadManager;
+﻿using Castle.DynamicProxy;
+using DownloadManager;
 using HtmlAgilityPack;
 using IanaUtilities;
 using ImageProcessing;
@@ -6,6 +7,8 @@ using Microsoft.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
+using Ninject;
+using Ninject.Parameters;
 using PowerStateManagement;
 using System;
 using System.Collections.Generic;
@@ -29,31 +32,15 @@ namespace ConsoleApp // Этот проект создан для быстрой
 
         static void Main(string[] args)
         {
-            //var queueClient = QueueClient.Create(_statusQueueName);
-            //var message = new BrokeredMessage(new ImageJoinerStatus { LastFileNumber = 10, ServiceName = "test" });
+            //var generator = new ProxyGenerator();
+            //var test = generator.CreateInterfaceProxyWithTarget<ITestClass>(new TestClass(), new ProxyTest());
+            //var x = test.TestMethod(1, 2);
 
-            //queueClient.Send(message);
-            //queueClient.Close();
+            //var x = new TestClass().TestMethod(1, 2);
 
-
-            //QueueClient client = QueueClient.Create(_statusQueueName, ReceiveMode.ReceiveAndDelete);
-            //message = client.Receive();
-            //var data = message.GetBody<ImageJoinerStatus>();
-
-            //var ser = new DataContractSerializer(typeof(ImageJoinerStatus));
-            //using (var stream = new FileStream($"{data.ServiceName}Settings.xml", FileMode.Create))
-            //{
-            //    ser.WriteObject(stream, data); 
-            //}
-
-            //client.Close();     
-
-
-            var ser = new DataContractSerializer(typeof(ImageJoinerSettings));
-            using (var stream = new FileStream($"Settingsssss.xml", FileMode.Create))
-            {
-                ser.WriteObject(stream, new ImageJoinerSettings() { UpdateStatusTimeout = 40 });
-            }
+            IKernel ninjectKernel = new StandardKernel(new NinjectConfigModule());
+            var test = ninjectKernel.Get<ITestClass>(new Parameter("test", "valueTest", false));
+            var x = test.TestMethod(1, 2);
         }
     }
 }

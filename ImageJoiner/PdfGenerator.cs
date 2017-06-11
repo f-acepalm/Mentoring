@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ImageProcessing
 {
-    public class PdfGenerator
+    public class PdfGenerator : IPdfGenerator
     {
         private string _outputDirectory;
         private Document _currentDocument;
@@ -32,6 +32,7 @@ namespace ImageProcessing
             StartNewDocument();
         }
 
+        //[LoggingAspect]
         public void AddImage(string fullPath)
         {
             var image = _currentSection.AddImage(fullPath);
@@ -49,6 +50,7 @@ namespace ImageProcessing
             AddedImages.Add(fullPath);
         }
 
+        //[LoggingAspect]
         public void CompleteFile()
         {
             var render = new PdfDocumentRenderer();
@@ -58,6 +60,7 @@ namespace ImageProcessing
             StartNewDocument();
         }
 
+        //[LoggingAspect]
         public void CompleteFileWithQueue()
         {
             var render = new PdfDocumentRenderer();
@@ -73,6 +76,7 @@ namespace ImageProcessing
             StartNewDocument();
         }
 
+        [LoggingAspect]
         public void StartNewDocument()
         {
             _currentDocument = new Document();

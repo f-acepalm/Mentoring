@@ -1,4 +1,5 @@
-﻿using Microsoft.ServiceBus;
+﻿using Castle.DynamicProxy;
+using Microsoft.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ImageProcessing
 {
-    public class ImageJoiner
+    public class ImageJoiner : IImageJoiner
     {
         private FileSystemWatcher _watcher;
         private string _inputDirectory;
@@ -21,7 +22,7 @@ namespace ImageProcessing
         private Thread _workingThread;
         private ManualResetEvent _workStoped;
         private AutoResetEvent _newFileAdded;
-        private PdfGenerator _pdfGenerator;
+        private IPdfGenerator _pdfGenerator;
         private int _previousFileNumber = -1;
         private Thread _updateStatusThread;
         private string _settingsQueueName = "SettingsQueue";
@@ -64,7 +65,11 @@ namespace ImageProcessing
                 nsManager.CreateQueue(_statusQueueName);
             }
 
-            _pdfGenerator = new PdfGenerator(outputDirectory);
+            //_pdfGenerator = new PdfGenerator(outputDirectory);
+            var generator = new ProxyGenerator();
+            _pdfGenerator = generator.CreateInterfaceProxyWithTarget<IPdfGenerator>(new PdfGenerator(outputDirectory), new LoggingProxy());
+
+
             _workingThread = new Thread(WorkProcedure);
             _updateStatusThread = new Thread(UpdateStatusProcedure);
             _getSettingsThread = new Thread(GetSettingsProcedure);
@@ -75,6 +80,7 @@ namespace ImageProcessing
             _watcher.Created += OnFileCreated;
         }
 
+        //[LoggingAspect]
         public void Start()
         {
             _workingThread.Start();
@@ -83,6 +89,7 @@ namespace ImageProcessing
             _watcher.EnableRaisingEvents = true;
         }
 
+        //[LoggingAspect]
         public void Stop()
         {
             try
