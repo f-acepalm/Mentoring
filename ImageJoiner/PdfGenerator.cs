@@ -32,7 +32,7 @@ namespace ImageProcessing
             StartNewDocument();
         }
 
-        //[LoggingAspect]
+        [LoggingAspect]
         public void AddImage(string fullPath)
         {
             var image = _currentSection.AddImage(fullPath);
@@ -50,7 +50,7 @@ namespace ImageProcessing
             AddedImages.Add(fullPath);
         }
 
-        //[LoggingAspect]
+        [LoggingAspect]
         public void CompleteFile()
         {
             var render = new PdfDocumentRenderer();
@@ -60,7 +60,7 @@ namespace ImageProcessing
             StartNewDocument();
         }
 
-        //[LoggingAspect]
+        [LoggingAspect]
         public void CompleteFileWithQueue()
         {
             var render = new PdfDocumentRenderer();

@@ -65,7 +65,6 @@ namespace ImageProcessing
                 nsManager.CreateQueue(_statusQueueName);
             }
 
-            //_pdfGenerator = new PdfGenerator(outputDirectory);
             var generator = new ProxyGenerator();
             _pdfGenerator = generator.CreateInterfaceProxyWithTarget<IPdfGenerator>(new PdfGenerator(outputDirectory), new LoggingProxy());
 
@@ -80,7 +79,7 @@ namespace ImageProcessing
             _watcher.Created += OnFileCreated;
         }
 
-        //[LoggingAspect]
+        [LoggingAspect]
         public void Start()
         {
             _workingThread.Start();
@@ -89,7 +88,7 @@ namespace ImageProcessing
             _watcher.EnableRaisingEvents = true;
         }
 
-        //[LoggingAspect]
+        [LoggingAspect]
         public void Stop()
         {
             try

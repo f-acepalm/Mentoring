@@ -15,25 +15,7 @@ namespace ImageProcessing
     [Serializable]
     public class LoggingAspect : OnMethodBoundaryAspect
     {
-        [NonSerialized]
-        private Logger _logger;
-
-        public LoggingAspect()
-        {
-            var currentDir = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            var logConfig = new LoggingConfiguration();
-            var target = new FileTarget()
-            {
-                Name = "Def",
-                FileName = Path.Combine(currentDir, "log.txt"),
-            };
-
-            logConfig.AddTarget(target);
-            logConfig.AddRuleForAllLevels(target);
-
-            var logFactory = new LogFactory(logConfig);
-            _logger = logFactory.GetCurrentClassLogger();
-        }
+        private readonly string _filePath = "log.txt";
 
         public override void OnEntry(MethodExecutionArgs args)
         {
@@ -43,8 +25,16 @@ namespace ImageProcessing
                 parameters = $"{parameters} | {Serializer.SerializeObject(item)}";
             }
 
-            _logger.Debug($"Method - {args.Method.Name}; Parameters: {parameters}");
+            Log($"{DateTime.Now} | CODE REWRITING | Method - {args.Method.Name}; Parameters: {parameters}");
             args.FlowBehavior = FlowBehavior.Default;
+        }
+
+        private void Log(string data)
+        {
+            using (StreamWriter sw = File.AppendText(_filePath))
+            {
+                sw.WriteLine(data);
+            }
         }
     }
 }
